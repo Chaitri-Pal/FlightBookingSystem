@@ -18,7 +18,12 @@ builder.Services.AddDbContext<ApplicationDBContext>(options=>
 
 //inject business layer services 
 builder.Services.AddScoped<ICustomerManager, CustomerManager>();
-
+builder.Services.AddScoped<IAirportManager, AirportManager>();
+builder.Services.AddScoped<IBookingManager, BookingManager>();
+builder.Services.AddScoped<IFlightManager, FlightManager>();
+builder.Services.AddScoped<IPaymentManager, PaymentManager>();
+builder.Services.AddScoped<IRewardManager, RewardManager>();
+builder.Services.AddScoped<IScheduleManager, ScheduleManager>();
 
 //Inject Data Dependency Data Access to the program
 //Using AddScoped as it uses only 1 instance. Whereas AddTransient where it creates 2 instances which may lead to conflict of resourses to avoid that use scoped that has one instance throughout.

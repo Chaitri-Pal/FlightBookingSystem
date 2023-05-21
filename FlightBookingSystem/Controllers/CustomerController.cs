@@ -20,6 +20,8 @@ namespace FlightBookingSystem.Controllers
             _cm = cm;
         }
 
+
+
         //Get:api/Customer
         /// <summary>
         /// This method returns all the Customers from Customer Table
@@ -30,6 +32,9 @@ namespace FlightBookingSystem.Controllers
         {
             return await _cm.GetAllCustomersAsync();
         }
+
+
+
 
         //Get: api/Customer/{id}
         /// <summary>
@@ -42,6 +47,9 @@ namespace FlightBookingSystem.Controllers
         {
             return await _cm.GetCustomerAsync(Id);
         }
+
+
+
 
 
         //Post: api/Customer
@@ -78,8 +86,15 @@ namespace FlightBookingSystem.Controllers
 
 
 
+
+        /// <summary>
+        /// This method is used to update customer details by giving the id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cs"></param>
+        /// <returns>Updated or not</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCutomer(int id,[FromBody] Customer cs)
+        public async Task<IActionResult> UpdateCustomer(int id,[FromBody] Customer cs)
         {
             try
             {
@@ -93,7 +108,7 @@ namespace FlightBookingSystem.Controllers
                     Customer existCs = await _cm.GetCustomerAsync(id);
                     if (existCs == null)
                     {
-                        return NotFound();
+                        return NotFound("Id does not exist");
                     }
                     else
                     {
@@ -113,6 +128,41 @@ namespace FlightBookingSystem.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error while Updating Customer Details");
             }
         }
+
+
+
+
+        /// <summary>
+        /// This method is used to remove customer details by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>deleted or not</returns>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCustomer(int id)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    //Function part of controllerbase
+                    return BadRequest();
+                }
+                else
+                {
+                    Customer delCs = await _cm.GetCustomerAsync(id);
+                    if (delCs == null)
+                    { return NotFound("ID does not exist"); }
+                    _cm.DeleteCustomer(delCs);
+                    return Ok("Customer Deleted");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error while Removing Customer Details");
+            }
+
+        }
+
 
     }
 }

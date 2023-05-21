@@ -34,7 +34,7 @@ namespace FlightBookingSystem.BAL.Services
            if(cs != null)
             {
                 IEnumerable<Customer> cust = await _da.Customer.GetAllAsync();
-                if(cust.Any(x => x.C_Name.Equals(cs.C_Name)))
+                if(cust.Any((x => x.C_Name.Equals(cs.C_Name) && x.Aadhar.Equals(cs.Aadhar))))
                 {
                     return await Task.FromResult(false);
                 }
@@ -62,6 +62,12 @@ namespace FlightBookingSystem.BAL.Services
         public void UpdateCustomer(Customer cs)
         {
             _da.Customer.UpdateExisting(cs);
+            _da.Save();
+        }
+
+        public void DeleteCustomer(Customer cs)
+        {
+            _da.Customer.Remove(cs);
             _da.Save();
         }
     }

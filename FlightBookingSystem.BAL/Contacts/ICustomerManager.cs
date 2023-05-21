@@ -14,5 +14,6 @@ namespace FlightBookingSystem.BAL.Contacts
         Task<Customer> GetCustomerAsync(int id);
         Task<bool> AddCustomer(Customer cs);
         void UpdateCustomer(Customer cs);
+        void DeleteCustomer(Customer cs);
     }
 }

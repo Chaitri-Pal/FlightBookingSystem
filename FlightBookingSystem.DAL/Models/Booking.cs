@@ -22,7 +22,6 @@ namespace FlightBookingSystem.DAL.Models
         [ForeignKey("Schedule_Id")]
         public virtual Schedule schedule { get; set; }
         [Required]
-        
         public int Cust_ID { get; set; }
         [ForeignKey("Cust_ID")]
         public virtual Customer customer { get; set; }
