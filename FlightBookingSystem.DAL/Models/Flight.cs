@@ -11,18 +11,17 @@ namespace FlightBookingSystem.DAL.Models
     {
         [Key]
         [Required]
-        public int Flight_Id { get; set; }
+        public int Flight_ID { get; set; }
         [Required]
         public string Flight_Name { get; set; }
         [Required]
-        public int Seat_capacity { get; set; }
+        public int Seat_Capacity { get; set; }
         [Required]
-        public int VacantSeat_capacity { get; set; }
+        public int Vacant_Seats { get; set; }
         [Required]
         public int Weight_limit { get; set; }
         [Required]
         public int Flying_hours { get; set; }
-        [Required]
-        public virtual Schedule schedule { get; set; }
+        public virtual ICollection<Schedule> schedules { get; set; }
     }
 }

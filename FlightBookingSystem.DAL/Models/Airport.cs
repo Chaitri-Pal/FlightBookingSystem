@@ -9,6 +9,11 @@ namespace FlightBookingSystem.DAL.Models
 {
     public class Airport
     {
+        public Airport() 
+        {
+            arrivalschedule = new HashSet<Schedule>();
+            departureschedule = new HashSet<Schedule>();
+        }
         [Key]
         [Required]
         public int Airport_Id { get; set; }
@@ -18,8 +23,9 @@ namespace FlightBookingSystem.DAL.Models
         public string State { get; set; }
         [Required]
         public string City { get; set; }
-       public virtual ICollection<Schedule> arrivalschedule { get; set; }
-       public virtual ICollection<Schedule> departureschedule { get; set; }
+        public virtual ICollection<Schedule> arrivalschedule { get; set; }
+        public virtual ICollection<Schedule> departureschedule { get; set; }
+       
         
     }
 }

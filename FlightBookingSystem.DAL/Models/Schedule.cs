@@ -14,24 +14,18 @@ namespace FlightBookingSystem.DAL.Models
         [Required]
         public int Schedule_Id { get; set; }
         [Required]
+        public DateTime Dep_Time { get; set; }
+        [Required]
+        public DateTime Arr_Time { get; set; }
+        [Required]
+        public int Dep_id { get; set; }
+        [ForeignKey("Dep_id")]
+        public virtual Airport departureAirport { get; set; }
+        [Required]
+        public int Arr_id { get; set; }
+        [ForeignKey("Arr_id")]
+        public virtual Airport arrivalAirport { get; set; }
+  
 
-        public int Flight_Id { get; set; }
-        [Required]
-        public DateTime dep_time { get; set; }
-        [Required]
-        public DateTime arr_time { get; set; }
-        [Required]
-        
-        public int dep_loc_id { get; set; }
-        [Required]
-        
-        public int arr_loc_id { get; set; }
-        
-        public virtual Airport arrivalairport { get; set; }
-        public virtual Airport departureairport { get; set; }
-        
-        [ForeignKey("Flight_Id")]
-        public virtual ICollection<Flight> flight { get; set; }
-        public virtual ICollection<Booking> booking { get; set; }
     }
 }

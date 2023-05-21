@@ -9,6 +9,10 @@ namespace FlightBookingSystem.DAL.Models
 {
     public class Reward
     {
+        public Reward()
+        {
+            booking = new HashSet<Booking>();
+        }
         [Key]
         [Required]
         public int Reward_Id { get; set; }
@@ -18,8 +22,6 @@ namespace FlightBookingSystem.DAL.Models
         public double Discount { get; set; }
         [Required]
         public virtual ICollection<Booking> booking { get; set; }
-        [Required]
-        public virtual ICollection<Payment> payment { get; set; }
-
+        
     }
 }

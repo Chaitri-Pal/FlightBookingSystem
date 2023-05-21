@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlightBookingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20230517155857_AllTables")]
-    partial class AllTables
+    [Migration("20230520174431_createAllModels")]
+    partial class createAllModels
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,10 +67,7 @@ namespace FlightBookingSystem.Migrations
                     b.Property<int>("Cust_ID")
                         .HasColumnType("int");
 
-                    b.Property<int>("Customer_Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Reward_Id")
+                    b.Property<int?>("Reward_Id")
                         .HasColumnType("int");
 
                     b.Property<int>("Schedule_Id")
@@ -78,7 +75,7 @@ namespace FlightBookingSystem.Migrations
 
                     b.HasKey("Booking_Id");
 
-                    b.HasIndex("Customer_Id");
+                    b.HasIndex("Cust_ID");
 
                     b.HasIndex("Reward_Id");
 
@@ -124,8 +121,11 @@ namespace FlightBookingSystem.Migrations
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Models.Flight", b =>
                 {
-                    b.Property<int>("Flight_Id")
+                    b.Property<int>("Flight_ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Flight_ID"));
 
                     b.Property<string>("Flight_Name")
                         .IsRequired()
@@ -134,16 +134,16 @@ namespace FlightBookingSystem.Migrations
                     b.Property<int>("Flying_hours")
                         .HasColumnType("int");
 
-                    b.Property<int>("Seat_capacity")
+                    b.Property<int>("Seat_Capacity")
                         .HasColumnType("int");
 
-                    b.Property<int>("VacantSeat_capacity")
+                    b.Property<int>("Vacant_Seats")
                         .HasColumnType("int");
 
                     b.Property<int>("Weight_limit")
                         .HasColumnType("int");
 
-                    b.HasKey("Flight_Id");
+                    b.HasKey("Flight_ID");
 
                     b.ToTable("Flights");
                 });
@@ -162,10 +162,7 @@ namespace FlightBookingSystem.Migrations
                     b.Property<int>("Booking_Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("Cust_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Customer_Id")
+                    b.Property<int?>("Customer_Id")
                         .HasColumnType("int");
 
                     b.Property<bool>("P_status")
@@ -178,16 +175,11 @@ namespace FlightBookingSystem.Migrations
                     b.Property<DateTime>("Payment_date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Reward_Id")
-                        .HasColumnType("int");
-
                     b.HasKey("Payment_Id");
 
                     b.HasIndex("Booking_Id");
 
-                    b.HasIndex("Cust_ID");
-
-                    b.HasIndex("Reward_Id");
+                    b.HasIndex("Customer_Id");
 
                     b.ToTable("Payments");
                 });
@@ -219,26 +211,28 @@ namespace FlightBookingSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Schedule_Id"));
 
-                    b.Property<int>("Flight_Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("arr_loc_id")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("arr_time")
+                    b.Property<DateTime>("Arr_Time")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("dep_loc_id")
+                    b.Property<int>("Arr_id")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("dep_time")
+                    b.Property<DateTime>("Dep_Time")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Dep_id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Flight_ID")
+                        .HasColumnType("int");
 
                     b.HasKey("Schedule_Id");
 
-                    b.HasIndex("arr_loc_id");
+                    b.HasIndex("Arr_id");
 
-                    b.HasIndex("dep_loc_id");
+                    b.HasIndex("Dep_id");
+
+                    b.HasIndex("Flight_ID");
 
                     b.ToTable("Schedules");
                 });
@@ -246,37 +240,22 @@ namespace FlightBookingSystem.Migrations
             modelBuilder.Entity("FlightBookingSystem.DAL.Models.Booking", b =>
                 {
                     b.HasOne("FlightBookingSystem.DAL.Models.Customer", "customer")
-                        .WithMany("booking")
-                        .HasForeignKey("Customer_Id")
+                        .WithMany("bookings")
+                        .HasForeignKey("Cust_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FlightBookingSystem.DAL.Models.Reward", "reward")
+                    b.HasOne("FlightBookingSystem.DAL.Models.Reward", null)
                         .WithMany("booking")
-                        .HasForeignKey("Reward_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Reward_Id");
 
                     b.HasOne("FlightBookingSystem.DAL.Models.Schedule", "schedule")
-                        .WithMany("booking")
+                        .WithMany()
                         .HasForeignKey("Schedule_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("customer");
-
-                    b.Navigation("reward");
-
-                    b.Navigation("schedule");
-                });
-
-            modelBuilder.Entity("FlightBookingSystem.DAL.Models.Flight", b =>
-                {
-                    b.HasOne("FlightBookingSystem.DAL.Models.Schedule", "schedule")
-                        .WithMany("flight")
-                        .HasForeignKey("Flight_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("schedule");
                 });
@@ -289,42 +268,34 @@ namespace FlightBookingSystem.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FlightBookingSystem.DAL.Models.Customer", "customer")
-                        .WithMany("payment")
-                        .HasForeignKey("Cust_ID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("FlightBookingSystem.DAL.Models.Reward", "reward")
-                        .WithMany("payment")
-                        .HasForeignKey("Reward_Id")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                    b.HasOne("FlightBookingSystem.DAL.Models.Customer", null)
+                        .WithMany("payments")
+                        .HasForeignKey("Customer_Id");
 
                     b.Navigation("booking");
-
-                    b.Navigation("customer");
-
-                    b.Navigation("reward");
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Models.Schedule", b =>
                 {
-                    b.HasOne("FlightBookingSystem.DAL.Models.Airport", "arrivalairport")
+                    b.HasOne("FlightBookingSystem.DAL.Models.Airport", "arrivalAirport")
                         .WithMany("arrivalschedule")
-                        .HasForeignKey("arr_loc_id")
+                        .HasForeignKey("Arr_id")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("FlightBookingSystem.DAL.Models.Airport", "departureairport")
+                    b.HasOne("FlightBookingSystem.DAL.Models.Airport", "departureAirport")
                         .WithMany("departureschedule")
-                        .HasForeignKey("dep_loc_id")
+                        .HasForeignKey("Dep_id")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("arrivalairport");
+                    b.HasOne("FlightBookingSystem.DAL.Models.Flight", null)
+                        .WithMany("schedules")
+                        .HasForeignKey("Flight_ID");
 
-                    b.Navigation("departureairport");
+                    b.Navigation("arrivalAirport");
+
+                    b.Navigation("departureAirport");
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Models.Airport", b =>
@@ -341,23 +312,19 @@ namespace FlightBookingSystem.Migrations
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Models.Customer", b =>
                 {
-                    b.Navigation("booking");
+                    b.Navigation("bookings");
 
-                    b.Navigation("payment");
+                    b.Navigation("payments");
+                });
+
+            modelBuilder.Entity("FlightBookingSystem.DAL.Models.Flight", b =>
+                {
+                    b.Navigation("schedules");
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Models.Reward", b =>
                 {
                     b.Navigation("booking");
-
-                    b.Navigation("payment");
-                });
-
-            modelBuilder.Entity("FlightBookingSystem.DAL.Models.Schedule", b =>
-                {
-                    b.Navigation("booking");
-
-                    b.Navigation("flight");
                 });
 #pragma warning restore 612, 618
         }

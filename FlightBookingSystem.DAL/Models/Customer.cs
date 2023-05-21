@@ -9,6 +9,11 @@ namespace FlightBookingSystem.DAL.Models
 {
     public class Customer
     {
+        public Customer()
+        {
+            bookings = new HashSet<Booking>();
+            payments = new HashSet<Payment>();
+        }
         [Key]
         [Required]
         public int Customer_Id { get; set; }
@@ -24,10 +29,10 @@ namespace FlightBookingSystem.DAL.Models
         public string Aadhar { get; set; }
         [Required]
         public DateTime DOB { get; set; }
-        [Required]
-        public virtual ICollection<Booking> booking { get; set; }
-        [Required]
-       public virtual ICollection<Payment> payment { get; set; }
+        
+        public virtual ICollection<Booking> bookings { get; set; }
+        
+        public virtual ICollection<Payment> payments { get; set; }
 
 
     }
