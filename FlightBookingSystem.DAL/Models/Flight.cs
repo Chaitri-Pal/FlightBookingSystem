@@ -9,6 +9,10 @@ namespace FlightBookingSystem.DAL.Models
 {
     public class Flight
     {
+        public Flight() 
+        {
+            schedules = new HashSet<Schedule>();
+        }
         [Key]
         [Required]
         public int Flight_ID { get; set; }

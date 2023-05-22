@@ -55,8 +55,9 @@ namespace FlightBookingSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Booking_Id"));
 
-                    b.Property<bool>("B_status")
-                        .HasColumnType("bit");
+                    b.Property<string>("B_status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Booking_date")
                         .HasColumnType("datetime2");
@@ -162,8 +163,9 @@ namespace FlightBookingSystem.Migrations
                     b.Property<int?>("Customer_Id")
                         .HasColumnType("int");
 
-                    b.Property<bool>("P_status")
-                        .HasColumnType("bit");
+                    b.Property<string>("P_status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("P_type")
                         .IsRequired()

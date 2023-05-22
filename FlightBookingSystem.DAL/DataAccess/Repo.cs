@@ -13,7 +13,7 @@ namespace FlightBookingSystem.DAL.DataAccess
     public class Repo<T> : IRepo<T> where T : class
     {
         private readonly ApplicationDBContext _db;
-        internal DbSet<T> DbSet;
+        public DbSet<T> DbSet { get; set; }
         public Repo(ApplicationDBContext db) 
         { 
             _db = db;

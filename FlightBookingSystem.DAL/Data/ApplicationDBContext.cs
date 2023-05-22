@@ -27,22 +27,22 @@ namespace FlightBookingSystem.DAL.Data
             base.OnModelCreating(modelBuilder);
 
             //process of linking 2 columns of 1 table to 1 primary key and due to multiple cascade paths ondelete option is give
-             modelBuilder.Entity<Schedule>()
-                 .HasKey(k => k.Schedule_Id);
-             modelBuilder.Entity<Schedule>()
-                 .HasOne(a => a.arrivalAirport)
-                 .WithMany(s => s.arrivalschedule)
-                 .HasForeignKey(a => a.Arr_id)
-                 .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Schedule>()
+                .HasKey(k => k.Schedule_Id);
+            modelBuilder.Entity<Schedule>()
+                .HasOne(a => a.arrivalAirport)
+                .WithMany(s => s.arrivalschedule)
+                .HasForeignKey(a => a.Arr_id)
+                .OnDelete(DeleteBehavior.NoAction);
 
-             modelBuilder.Entity<Schedule>()
-                 .HasOne(d => d.departureAirport)
-                 .WithMany(s => s.departureschedule)
-                 .HasForeignKey(d => d.Dep_id)
-                 .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Schedule>()
+                .HasOne(d => d.departureAirport)
+                .WithMany(s => s.departureschedule)
+                .HasForeignKey(d => d.Dep_id)
+                .OnDelete(DeleteBehavior.NoAction);
 
-            
-                
+
+
 
 
 
@@ -58,6 +58,7 @@ namespace FlightBookingSystem.DAL.Data
                 .OnDelete(DeleteBehavior.NoAction);*/
 
         }
+
     }
 }
 

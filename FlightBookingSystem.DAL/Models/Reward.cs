@@ -20,7 +20,7 @@ namespace FlightBookingSystem.DAL.Models
         public int loyalty_value { get; set; }
         [Required]
         public double Discount { get; set; }
-        [Required]
+        //[Required]
         public virtual ICollection<Booking> booking { get; set; }
         
     }

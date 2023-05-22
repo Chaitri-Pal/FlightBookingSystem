@@ -115,6 +115,7 @@ namespace FlightBookingSystem.Controllers
                         existpy.Booking_Id = py.Booking_Id;
                         existpy.P_type = py.P_type;
                         existpy.P_status = py.P_status;
+
                         existpy.Payment_date = py.Payment_date;
                         existpy.Amount = py.Amount;
                         //existpy.Customer_Id = py.Customer_Id;

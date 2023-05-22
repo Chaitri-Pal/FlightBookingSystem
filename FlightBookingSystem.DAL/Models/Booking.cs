@@ -17,19 +17,20 @@ namespace FlightBookingSystem.DAL.Models
         [Key]
         [Required]
         public int Booking_Id { get; set; }
-        [Required]
+        //[Required]
         public int Schedule_Id { get; set; }
         [ForeignKey("Schedule_Id")]
         public virtual Schedule schedule { get; set; }
-        [Required]
+        //[Required]
         public int Cust_ID { get; set; }
         [ForeignKey("Cust_ID")]
         public virtual Customer customer { get; set; }
         [Required]
         public DateTime Booking_date { get; set; }
         [Required]
-        public bool B_status { get; set; }
-        [Required]
+        public string B_status { get; set; }
+        //[Required]
         public virtual ICollection<Payment> payment { get; set; }
+        //public int Reward_Id { get; set; }
     }
 }

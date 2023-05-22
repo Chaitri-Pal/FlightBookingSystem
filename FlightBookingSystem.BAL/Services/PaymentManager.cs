@@ -45,6 +45,7 @@ namespace FlightBookingSystem.BAL.Services
                     obs.Booking_Id = py.Booking_Id;
                     obs.P_type = py.P_type;
                     obs.P_status = py.P_status;
+
                     obs.Payment_date = py.Payment_date;
                     obs.Amount = py.Amount;
                     //obs.Customer_Id = py.Customer_Id;

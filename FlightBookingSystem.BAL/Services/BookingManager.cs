@@ -45,7 +45,8 @@ namespace FlightBookingSystem.BAL.Services
                     obs.Cust_ID= bk.Cust_ID;
                     obs.Booking_date = bk.Booking_date;
                     obs.B_status = bk.B_status;
-                   // obs.Reward_Id = bk.Reward_Id;
+
+                    // obs.Reward_Id = bk.Reward_Id;
                     _da.Booking.AddAsync(obs);
                     _da.Save();
                     return await Task.FromResult(true);

@@ -17,14 +17,17 @@ namespace FlightBookingSystem.DAL.Models
         public DateTime Dep_Time { get; set; }
         [Required]
         public DateTime Arr_Time { get; set; }
-        [Required]
+        //[Required]
         public int Dep_id { get; set; }
         [ForeignKey("Dep_id")]
         public virtual Airport departureAirport { get; set; }
-        [Required]
+        //[Required]
         public int Arr_id { get; set; }
         [ForeignKey("Arr_id")]
         public virtual Airport arrivalAirport { get; set; }
+        //public int Flight_Id { get; set; }
+        
+
   
 
     }

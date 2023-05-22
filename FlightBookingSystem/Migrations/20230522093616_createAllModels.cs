@@ -116,7 +116,7 @@ namespace FlightBookingSystem.Migrations
                     Schedule_Id = table.Column<int>(type: "int", nullable: false),
                     Cust_ID = table.Column<int>(type: "int", nullable: false),
                     Booking_date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    B_status = table.Column<bool>(type: "bit", nullable: false),
+                    B_status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Reward_Id = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -149,7 +149,7 @@ namespace FlightBookingSystem.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Booking_Id = table.Column<int>(type: "int", nullable: false),
                     P_type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    P_status = table.Column<bool>(type: "bit", nullable: false),
+                    P_status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Payment_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: false),
                     Customer_Id = table.Column<int>(type: "int", nullable: true)
