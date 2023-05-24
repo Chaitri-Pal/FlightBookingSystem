@@ -1,4 +1,4 @@
-﻿using FlightBookingSystem.DAL.Models;
+﻿using FlightBookingSystem.DAL.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,8 +12,8 @@ namespace FlightBookingSystem.BAL.Contacts
     {
         Task<IEnumerable<Booking>> GetAllBookingsAsync();
         Task<Booking> GetBookingAsync(int id);
-        Task<bool> AddBooking(Booking ai);
-        void UpdateBooking(Booking ai);
-        void DeleteBooking(Booking ai);
+        Task<bool> AddBooking(Booking bk);
+        void UpdateBooking(Booking bk);
+        void DeleteBooking(Booking bk);
     }
 }

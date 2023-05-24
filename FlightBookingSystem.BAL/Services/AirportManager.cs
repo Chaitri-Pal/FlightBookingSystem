@@ -1,7 +1,7 @@
 ﻿using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
-using FlightBookingSystem.DAL.Models;
+using FlightBookingSystem.DAL.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,7 +25,7 @@ namespace FlightBookingSystem.BAL.Services
 
         public async Task<Airport> GetAirportAsync(int id)
         {
-            return await _da.Airport.GetFirstorDefaultAsync(x => x.Airport_Id == id);
+            return await _da.Airport.GetFirstorDefaultAsync(x => x.Id == id);
         }
 
         public async Task<bool> AddAirport(Airport ai)

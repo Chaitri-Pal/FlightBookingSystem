@@ -1,7 +1,7 @@
 ﻿using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
-using FlightBookingSystem.DAL.Models;
+using FlightBookingSystem.DAL.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -114,9 +114,9 @@ namespace FlightBookingSystem.Controllers
                     {
                         existFl.Flight_Name = fl.Flight_Name;
                         existFl.Seat_Capacity = fl.Seat_Capacity;
-                        existFl.Vacant_Seats = fl.Vacant_Seats;
-                        existFl.Weight_limit = fl.Weight_limit;
-                        existFl.Flying_hours = fl.Flying_hours;
+                        existFl.Vacant_Seat = fl.Vacant_Seat;
+                        existFl.Weight_Limit = fl.Weight_Limit;
+                        existFl.Flying_Hours = fl.Flying_Hours;
                         _fl.UpdateFlight(existFl);
                         return Ok("Flight detail updated");
                     }

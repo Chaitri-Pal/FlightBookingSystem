@@ -5,27 +5,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlightBookingSystem.DAL.Models
+namespace FlightBookingSystem.DAL.Model
 {
     public class Flight
     {
-        public Flight() 
-        {
-            schedules = new HashSet<Schedule>();
-        }
         [Key]
-        [Required]
-        public int Flight_ID { get; set; }
+        public int Id { get; set; }
         [Required]
         public string Flight_Name { get; set; }
         [Required]
         public int Seat_Capacity { get; set; }
         [Required]
-        public int Vacant_Seats { get; set; }
+        public int Vacant_Seat { get; set; }
         [Required]
-        public int Weight_limit { get; set; }
+        public int Weight_Limit { get; set; }
         [Required]
-        public int Flying_hours { get; set; }
+        public int Flying_Hours { get; set; }
+
+
+        //Navigation properties of child tables
         public virtual ICollection<Schedule> schedules { get; set; }
+
     }
 }

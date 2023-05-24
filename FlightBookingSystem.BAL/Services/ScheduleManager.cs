@@ -1,7 +1,7 @@
 ﻿using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
-using FlightBookingSystem.DAL.Models;
+using FlightBookingSystem.DAL.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,7 +25,7 @@ namespace FlightBookingSystem.BAL.Services
 
         public async Task<Schedule> GetScheduleAsync(int id)
         {
-            return await _da.Schedule.GetFirstorDefaultAsync(x => x.Schedule_Id == id);
+            return await _da.Schedule.GetFirstorDefaultAsync(x => x.Id == id);
         }
 
         public async Task<bool> AddSchedule(Schedule sh)

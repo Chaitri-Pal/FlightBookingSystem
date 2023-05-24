@@ -1,7 +1,7 @@
 ﻿using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
-using FlightBookingSystem.DAL.Models;
+using FlightBookingSystem.DAL.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,7 +25,7 @@ namespace FlightBookingSystem.BAL.Services
 
         public async Task<Reward> GetRewardAsync(int id)
         {
-            return await _da.Reward.GetFirstorDefaultAsync(x => x.Reward_Id == id);
+            return await _da.Reward.GetFirstorDefaultAsync(x => x.Id == id);
         }
 
         public async Task<bool> AddReward(Reward rw)
@@ -34,14 +34,14 @@ namespace FlightBookingSystem.BAL.Services
             if (rw != null)
             {
                 IEnumerable<Reward> rew = await _da.Reward.GetAllAsync();
-                if (rew.Any((x => x.loyalty_value.Equals(rw.loyalty_value) && x.Discount.Equals(rw.Discount))))
+                if (rew.Any((x => x.Loyalty_Value.Equals(rw.Loyalty_Value) && x.Discount.Equals(rw.Discount))))
                 {
                     return await Task.FromResult(false);
                 }
                 else
                 {
                     var obs = new Reward();
-                    obs.loyalty_value = rw.loyalty_value;
+                    obs.Loyalty_Value = rw.Loyalty_Value;
                     obs.Discount = rw.Discount;
                     _da.Reward.AddAsync(obs);
                     _da.Save();

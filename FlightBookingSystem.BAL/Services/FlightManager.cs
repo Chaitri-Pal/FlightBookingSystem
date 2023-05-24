@@ -1,7 +1,7 @@
 ﻿using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
-using FlightBookingSystem.DAL.Models;
+using FlightBookingSystem.DAL.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,7 +25,7 @@ namespace FlightBookingSystem.BAL.Services
 
         public async Task<Flight> GetFlightAsync(int id)
         {
-            return await _da.Flight.GetFirstorDefaultAsync(x => x.Flight_ID == id);
+            return await _da.Flight.GetFirstorDefaultAsync(x => x.Id == id);
         }
 
         public async Task<bool> AddFlight(Flight fl)
@@ -43,9 +43,9 @@ namespace FlightBookingSystem.BAL.Services
                     var flg = new Flight();
                     flg.Flight_Name = fl.Flight_Name;
                     flg.Seat_Capacity = fl.Seat_Capacity;
-                    flg.Vacant_Seats = fl.Vacant_Seats;
-                    flg.Weight_limit = fl.Weight_limit;
-                    flg.Flying_hours = fl.Flying_hours;
+                    flg.Vacant_Seat = fl.Vacant_Seat;
+                    flg.Weight_Limit = fl.Weight_Limit;
+                    flg.Flying_Hours = fl.Flying_Hours;
                     _da.Flight.AddAsync(flg);
                     _da.Save();
                     return await Task.FromResult(true);

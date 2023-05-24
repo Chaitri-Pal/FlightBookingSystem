@@ -1,7 +1,7 @@
 ﻿using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
-using FlightBookingSystem.DAL.Models;
+using FlightBookingSystem.DAL.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,7 +25,7 @@ namespace FlightBookingSystem.BAL.Services
 
         public async Task<Booking> GetBookingAsync(int id)
         {
-            return await _da.Booking.GetFirstorDefaultAsync(x => x.Booking_Id == id);
+            return await _da.Booking.GetFirstorDefaultAsync(x => x.Id == id);
         }
 
         public async Task<bool> AddBooking(Booking bk)
@@ -34,19 +34,20 @@ namespace FlightBookingSystem.BAL.Services
             if (bk != null)
             {
                 IEnumerable<Booking> book = await _da.Booking.GetAllAsync();
-                if (book.Any(x => x.Schedule_Id.Equals(bk.Schedule_Id) && x.Cust_ID.Equals(bk.Cust_ID)))
+                if (book.Any(x => x.Schedule_Id.Equals(bk.Schedule_Id) && x.Customer_Id.Equals(bk.Customer_Id)))
                 {
                     return await Task.FromResult(false);
                 }
                 else
                 {
                     var obs = new Booking();
-                    obs.Schedule_Id = bk.Schedule_Id;
-                    obs.Cust_ID= bk.Cust_ID;
+
                     obs.Booking_date = bk.Booking_date;
                     obs.B_status = bk.B_status;
-
-                    // obs.Reward_Id = bk.Reward_Id;
+                    //
+                    obs.Schedule_Id = bk.Schedule_Id;
+                    obs.Customer_Id = bk.Customer_Id;
+                    obs.Reward_Id = bk.Reward_Id;
                     _da.Booking.AddAsync(obs);
                     _da.Save();
                     return await Task.FromResult(true);

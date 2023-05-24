@@ -1,7 +1,7 @@
 ﻿using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
-using FlightBookingSystem.DAL.Models;
+using FlightBookingSystem.DAL.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -114,9 +114,10 @@ namespace FlightBookingSystem.Controllers
                     else
                     {
                         existBk.Schedule_Id = bk.Schedule_Id;
-                        existBk.Cust_ID = bk.Cust_ID;
+                        existBk.Customer_Id = bk.Customer_Id;
                         existBk.Booking_date = bk.Booking_date;                
                         existBk.B_status = bk.B_status;
+
                         //existBk.Reward_Id = bk.Reward_Id;
                         
                         return Ok("Booking detail updated");

@@ -1,4 +1,4 @@
-﻿using FlightBookingSystem.DAL.Models;
+﻿using FlightBookingSystem.DAL.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

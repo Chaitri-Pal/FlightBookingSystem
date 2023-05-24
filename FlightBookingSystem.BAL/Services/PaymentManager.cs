@@ -1,7 +1,7 @@
 ﻿using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
-using FlightBookingSystem.DAL.Models;
+using FlightBookingSystem.DAL.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,7 +25,7 @@ namespace FlightBookingSystem.BAL.Services
 
         public async Task<Payment> GetPaymentAsync(int id)
         {
-            return await _da.Payment.GetFirstorDefaultAsync(x => x.Payment_Id == id);
+            return await _da.Payment.GetFirstorDefaultAsync(x => x.Id == id);
         }
 
         public async Task<bool> AddPayment(Payment py)
@@ -42,13 +42,15 @@ namespace FlightBookingSystem.BAL.Services
                 else
                 {
                     var obs = new Payment();
-                    obs.Booking_Id = py.Booking_Id;
-                    obs.P_type = py.P_type;
-                    obs.P_status = py.P_status;
-
+                    
+                    obs.P_Type = py.P_Type;
+                    obs.P_Status = py.P_Status;
                     obs.Payment_date = py.Payment_date;
                     obs.Amount = py.Amount;
-                    //obs.Customer_Id = py.Customer_Id;
+                    //
+                    obs.Customer_Id = py.Customer_Id;
+                    obs.Reward_Id = py.Reward_Id;
+                    obs.Booking_Id = py.Booking_Id;
                     _da.Payment.AddAsync(obs);
                     _da.Save();
                     return await Task.FromResult(true);

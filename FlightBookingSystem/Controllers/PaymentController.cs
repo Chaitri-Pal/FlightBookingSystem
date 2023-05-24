@@ -1,7 +1,7 @@
 ﻿using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
-using FlightBookingSystem.DAL.Models;
+using FlightBookingSystem.DAL.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -113,8 +113,8 @@ namespace FlightBookingSystem.Controllers
                     else
                     {
                         existpy.Booking_Id = py.Booking_Id;
-                        existpy.P_type = py.P_type;
-                        existpy.P_status = py.P_status;
+                        existpy.P_Type = py.P_Type;
+                        existpy.P_Status = py.P_Status;
 
                         existpy.Payment_date = py.Payment_date;
                         existpy.Amount = py.Amount;

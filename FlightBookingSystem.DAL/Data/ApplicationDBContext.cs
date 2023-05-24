@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FlightBookingSystem.DAL.Models;
-
+using FlightBookingSystem.DAL.Model;
 
 namespace FlightBookingSystem.DAL.Data
 {
@@ -27,35 +26,63 @@ namespace FlightBookingSystem.DAL.Data
             base.OnModelCreating(modelBuilder);
 
             //process of linking 2 columns of 1 table to 1 primary key and due to multiple cascade paths ondelete option is give
-            modelBuilder.Entity<Schedule>()
-                .HasKey(k => k.Schedule_Id);
+            //modelBuilder.Entity<Schedule>()
+            //  .HasKey(k => k.Id);
+
             modelBuilder.Entity<Schedule>()
                 .HasOne(a => a.arrivalAirport)
-                .WithMany(s => s.arrivalschedule)
+                .WithMany(s => s.arrivalSchedule)
                 .HasForeignKey(a => a.Arr_id)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Schedule>()
                 .HasOne(d => d.departureAirport)
-                .WithMany(s => s.departureschedule)
+                .WithMany(s => s.departureSchedule)
                 .HasForeignKey(d => d.Dep_id)
                 .OnDelete(DeleteBehavior.NoAction);
 
-
-
-
-
-
-
-            /*modelBuilder.Entity<Payment>()
-                .HasOne(c => c.customer)
-                .WithMany()
+            modelBuilder.Entity<Schedule>()
+                .HasOne(f => f.flights)
+                .WithMany(s => s.schedules)
+                .HasForeignKey(f => f.Flight_Id)
                 .OnDelete(DeleteBehavior.NoAction);
 
-           /* modelBuilder.Entity<Payment>()
-                .HasOne(c => c.reward)
-                .WithMany()
-                .OnDelete(DeleteBehavior.NoAction);*/
+            modelBuilder.Entity<Booking>()
+                .HasOne(c => c.customers)
+                .WithMany(b => b.bookings)
+                .HasForeignKey(c => c.Customer_Id)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Booking>()
+               .HasOne(r => r.rewards)
+               .WithMany(b => b.bookings)
+               .HasForeignKey(r => r.Reward_Id)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Booking>()
+               .HasOne(s => s.schedules)
+               .WithMany(b => b.bookings)
+               .HasForeignKey(s => s.Schedule_Id)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Payment>()
+               .HasOne(c => c.customers)
+               .WithMany(p => p.payments)
+               .HasForeignKey(c => c.Customer_Id)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Payment>()
+               .HasOne(b => b.bookings)
+               .WithMany(p => p.payments)
+               .HasForeignKey(b => b.Booking_Id)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Payment>()
+                .HasOne(r => r.rewards)
+                .WithMany(p => p.payments)
+                .HasForeignKey(r => r.Reward_Id)
+                .OnDelete(DeleteBehavior.NoAction);
+
 
         }
 
