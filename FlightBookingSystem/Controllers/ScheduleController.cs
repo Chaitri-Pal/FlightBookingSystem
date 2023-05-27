@@ -1,7 +1,9 @@
-﻿using FlightBookingSystem.BAL.Contacts;
+﻿using AutoMapper;
+using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
 using FlightBookingSystem.DAL.Model;
+using FlightBookingSystem.DAL.View_Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,9 +17,11 @@ namespace FlightBookingSystem.Controllers
     public class ScheduleController : ControllerBase
     {
         private readonly IScheduleManager _sh;
-        public ScheduleController(IScheduleManager sh)
+        private readonly IMapper _mapper;
+        public ScheduleController(IScheduleManager sh, IMapper mapper)
         {
             _sh = sh;
+            _mapper = mapper;
         }
 
 
@@ -28,9 +32,12 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <returns>List of all the Schedules</returns>
         [HttpGet]
-        public async Task<IEnumerable<Schedule>> GetSchedules()
+        public async Task<IEnumerable<ScheduleVM>> GetSchedules()
         {
-            return await _sh.GetAllSchedulesAsync();
+            IEnumerable<Schedule> shd = await _sh.GetAllSchedulesAsync();
+            var shob = shd.Select(shd => _mapper.Map<ScheduleVM>(shd));
+            return shob;
+            //return await _sh.GetAllSchedulesAsync();
         }
 
 
@@ -42,10 +49,13 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns>The Schedule that matches with the id</returns>
-        [HttpGet("{id}")]
-        public async Task<Schedule> GetASchedule(int Id)
+        [HttpGet("{Id}")]
+        public async Task<ScheduleVM> GetASchedule(int Id)
         {
-            return await _sh.GetScheduleAsync(Id);
+            Schedule shd = await _sh.GetScheduleAsync(Id);
+            var shob = _mapper.Map<ScheduleVM>(shd);
+            return shob;
+            //return await _sh.GetScheduleAsync(Id);
         }
 
 
@@ -59,7 +69,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="sh"></param>
         /// <returns>Output that Schedule is added/exists/ or not</returns>
         [HttpPost]
-        public async Task<IActionResult> AddSchedule(Schedule sh)
+        public async Task<IActionResult> AddSchedule(ScheduleVM sh)
         {
             try
             {
@@ -70,10 +80,18 @@ namespace FlightBookingSystem.Controllers
                 }
                 else
                 {
-                    if (await _sh.AddSchedule(sh))
+                    Schedule shob = _mapper.Map<Schedule>(sh);
+                    var check = await _sh.AddSchedule(shob);
+                    if (check == 2)
                         return StatusCode(StatusCodes.Status201Created, "New Schedule is Created");
-                    else
+                    else if (check == 0)
                         return StatusCode(StatusCodes.Status400BadRequest, "Schedule already exists");
+                    else if (check == 1)
+                        return StatusCode(StatusCodes.Status400BadRequest, "Foreign Key values are wrong");
+                    else if (check == -2)
+                        return StatusCode(StatusCodes.Status400BadRequest, "Arrival and Departure Airports cannot be same");
+                    else
+                        return StatusCode(StatusCodes.Status400BadRequest, "The Payment object entered is empty");
                 }
 
             }
@@ -94,7 +112,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="sh"></param>
         /// <returns>Updated or not</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSchedule(int id, [FromBody] Schedule sh)
+        public async Task<IActionResult> UpdateSchedule(int id, [FromBody] ScheduleVM sh)
         {
             try
             {
@@ -112,11 +130,12 @@ namespace FlightBookingSystem.Controllers
                     }
                     else
                     {
-                        existsh.Dep_Time = sh.Dep_Time;
+                        /*existsh.Dep_Time = sh.Dep_Time;
                         existsh.Arr_Time = sh.Arr_Time;
                         existsh.Dep_id = sh.Dep_id;
                         existsh.Arr_id = existsh.Arr_id;
-                        //existsh.Flight_ID = sh.Flight_ID;
+                        existsh.Flight_Id = sh.Flight_Id;*/
+                        Schedule shob = _mapper.Map<ScheduleVM,Schedule>(sh, existsh);
                         _sh.UpdateSchedule(existsh);
                         return Ok("Schedule detail updated");
                     }

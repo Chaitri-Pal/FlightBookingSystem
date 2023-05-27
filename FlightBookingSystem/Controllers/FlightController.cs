@@ -1,7 +1,9 @@
-﻿using FlightBookingSystem.BAL.Contacts;
+﻿using AutoMapper;
+using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
 using FlightBookingSystem.DAL.Model;
+using FlightBookingSystem.DAL.View_Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,9 +17,11 @@ namespace FlightBookingSystem.Controllers
     public class FlightController : ControllerBase
     {
         private readonly IFlightManager _fl;
-        public FlightController(IFlightManager fl)
+        private readonly IMapper _mapper;
+        public FlightController(IFlightManager fl, IMapper mapper)
         {
             _fl = fl;
+            _mapper = mapper;
         }
 
 
@@ -28,9 +32,12 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <returns>List of all the Flights</returns>
         [HttpGet]
-        public async Task<IEnumerable<Flight>> GetFlights()
+        public async Task<IEnumerable<FlightVM>> GetFlights()
         {
-            return await _fl.GetAllFlightsAsync();
+            IEnumerable<Flight> flt = await _fl.GetAllFlightsAsync();
+            var flob = flt.Select(flt => _mapper.Map<FlightVM>(flt));
+            return flob;
+            //return await _fl.GetAllFlightsAsync();
         }
 
 
@@ -42,10 +49,13 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns>The Flight that matches with the id</returns>
-        [HttpGet("{id}")]
-        public async Task<Flight> GetAFlight(int Id)
+        [HttpGet("{Id}")]
+        public async Task<FlightVM> GetAFlight(int Id)
         {
-            return await _fl.GetFlightAsync(Id);
+            Flight flt = await _fl.GetFlightAsync(Id);
+            var flob = _mapper.Map<FlightVM>(flt);
+            return flob;
+            //return await _fl.GetFlightAsync(Id);
         }
 
 
@@ -59,7 +69,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="fl"></param>
         /// <returns>Output that Flight is added/exists/ or not</returns>
         [HttpPost]
-        public async Task<IActionResult> AddFlight(Flight fl)
+        public async Task<IActionResult> AddFlight(FlightVM fl)
         {
             try
             {
@@ -70,7 +80,8 @@ namespace FlightBookingSystem.Controllers
                 }
                 else
                 {
-                    if (await _fl.AddFlight(fl))
+                    Flight flob = _mapper.Map<Flight>(fl);
+                    if (await _fl.AddFlight(flob))
                         return StatusCode(StatusCodes.Status201Created, "New Flight is Created");
                     else
                         return StatusCode(StatusCodes.Status400BadRequest, "Flight already exists");
@@ -94,7 +105,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="fl"></param>
         /// <returns>Updated or not</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateFlight(int id, [FromBody] Flight fl)
+        public async Task<IActionResult> UpdateFlight(int id, [FromBody] FlightVM fl)
         {
             try
             {
@@ -112,12 +123,13 @@ namespace FlightBookingSystem.Controllers
                     }
                     else
                     {
-                        existFl.Flight_Name = fl.Flight_Name;
+                        /*existFl.Flight_Name = fl.Flight_Name;
                         existFl.Seat_Capacity = fl.Seat_Capacity;
                         existFl.Vacant_Seat = fl.Vacant_Seat;
                         existFl.Weight_Limit = fl.Weight_Limit;
-                        existFl.Flying_Hours = fl.Flying_Hours;
-                        _fl.UpdateFlight(existFl);
+                        existFl.Flying_Hours = fl.Flying_Hours;*/
+                        Flight flob = _mapper.Map<FlightVM,Flight>(fl, existFl);
+                        _fl.UpdateFlight(flob);
                         return Ok("Flight detail updated");
                     }
                 }

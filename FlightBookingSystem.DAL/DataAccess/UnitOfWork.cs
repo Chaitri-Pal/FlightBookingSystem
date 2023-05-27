@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using FlightBookingSystem.DAL.Model;
 using FlightBookingSystem.DAL.Data;
+using Microsoft.EntityFrameworkCore;
+using FlightBookingSystem.DAL.View_Model;
 
 namespace FlightBookingSystem.DAL.DataAccess
 {
@@ -48,7 +50,6 @@ namespace FlightBookingSystem.DAL.DataAccess
         {
             _db = db;
         }
-
     }
     public class FlightRepo : Repo<Flight>, IFlightRepo
     {

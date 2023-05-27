@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using FlightBookingSystem.DAL.View_Model;
 
 namespace FlightBookingSystem.DAL.DataAccess
 {

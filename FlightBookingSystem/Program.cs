@@ -18,7 +18,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(options=>
 });
 //We are passing interface and not create objects, if not then for each controller we have to do the steps separately
 
-
+//Automapper
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 //inject business layer services 
 builder.Services.AddScoped<ICustomerManager, CustomerManager>();

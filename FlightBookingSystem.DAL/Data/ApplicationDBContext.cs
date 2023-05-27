@@ -21,6 +21,7 @@ namespace FlightBookingSystem.DAL.Data
         public DbSet<Payment> Payments { get; set; }
 
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

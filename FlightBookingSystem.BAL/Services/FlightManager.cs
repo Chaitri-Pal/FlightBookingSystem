@@ -40,13 +40,13 @@ namespace FlightBookingSystem.BAL.Services
                 }
                 else
                 {
-                    var flg = new Flight();
+                    /*var flg = new Flight();
                     flg.Flight_Name = fl.Flight_Name;
                     flg.Seat_Capacity = fl.Seat_Capacity;
                     flg.Vacant_Seat = fl.Vacant_Seat;
                     flg.Weight_Limit = fl.Weight_Limit;
-                    flg.Flying_Hours = fl.Flying_Hours;
-                    _da.Flight.AddAsync(flg);
+                    flg.Flying_Hours = fl.Flying_Hours;*/
+                    _da.Flight.AddAsync(fl);
                     _da.Save();
                     return await Task.FromResult(true);
                 }

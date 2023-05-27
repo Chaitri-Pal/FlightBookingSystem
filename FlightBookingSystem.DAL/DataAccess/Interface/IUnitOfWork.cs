@@ -1,4 +1,5 @@
 ﻿using FlightBookingSystem.DAL.Model;
+using FlightBookingSystem.DAL.View_Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,9 @@ namespace FlightBookingSystem.DAL.DataAccess.Interface
     }
     public interface ICustomerRepo : IRepo<Customer> { }
     public interface IAirportRepo : IRepo<Airport> { }
+
+    
+
     public interface IBookingRepo : IRepo<Booking> { }
     public interface IFlightRepo : IRepo<Flight> { }
     public interface IPaymentRepo : IRepo<Payment> { }

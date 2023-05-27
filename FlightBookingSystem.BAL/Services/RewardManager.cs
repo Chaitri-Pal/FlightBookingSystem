@@ -40,10 +40,10 @@ namespace FlightBookingSystem.BAL.Services
                 }
                 else
                 {
-                    var obs = new Reward();
+                    /*var obs = new Reward();
                     obs.Loyalty_Value = rw.Loyalty_Value;
-                    obs.Discount = rw.Discount;
-                    _da.Reward.AddAsync(obs);
+                    obs.Discount = rw.Discount;*/
+                    _da.Reward.AddAsync(rw);
                     _da.Save();
                     return await Task.FromResult(true);
                 }

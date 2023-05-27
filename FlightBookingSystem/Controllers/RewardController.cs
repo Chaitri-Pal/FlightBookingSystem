@@ -1,7 +1,9 @@
-﻿using FlightBookingSystem.BAL.Contacts;
+﻿using AutoMapper;
+using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
 using FlightBookingSystem.DAL.Model;
+using FlightBookingSystem.DAL.View_Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,9 +17,11 @@ namespace FlightBookingSystem.Controllers
     public class RewardController : ControllerBase
     {
         private readonly IRewardManager _rw;
-        public RewardController(IRewardManager rw)
+        private readonly IMapper _mapper;
+        public RewardController(IRewardManager rw, IMapper mapper)
         {
             _rw = rw;
+            _mapper = mapper;
         }
 
 
@@ -28,9 +32,14 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <returns>List of all the Reward</returns>
         [HttpGet]
-        public async Task<IEnumerable<Reward>> GetRewards()
+        public async Task<IEnumerable<RewardVM>> GetRewards()
         {
-            return await _rw.GetAllRewardsAsync();
+            IEnumerable<Reward> rew = await _rw.GetAllRewardsAsync();
+            //of type  IEnumerable<RewardVM>
+            var rob = rew.Select(rew => _mapper.Map<RewardVM>(rew));
+            return rob;
+
+            //return await _rw.GetAllRewardsAsync();
         }
 
 
@@ -42,10 +51,13 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns>The Reward that matches with the id</returns>
-        [HttpGet("{id}")]
-        public async Task<Reward> GetAReward(int Id)
+        [HttpGet("{Id}")]
+        public async Task<RewardVM> GetAReward(int Id)
         {
-            return await _rw.GetRewardAsync(Id);
+            Reward rew = await _rw.GetRewardAsync(Id);
+            var rob = _mapper.Map<RewardVM>(rew);
+            return rob;
+            //return await _rw.GetRewardAsync(Id);
         }
 
 
@@ -59,7 +71,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="rw"></param>
         /// <returns>Output that Reward is added/exists/ or not</returns>
         [HttpPost]
-        public async Task<IActionResult> AddReward(Reward rw)
+        public async Task<IActionResult> AddReward(RewardVM rw)
         {
             try
             {
@@ -70,7 +82,8 @@ namespace FlightBookingSystem.Controllers
                 }
                 else
                 {
-                    if (await _rw.AddReward(rw))
+                    Reward rob = _mapper.Map<Reward>(rw);
+                    if (await _rw.AddReward(rob))
                         return StatusCode(StatusCodes.Status201Created, "New Reward is Created");
                     else
                         return StatusCode(StatusCodes.Status400BadRequest, "Reward already exists");
@@ -94,7 +107,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="rw"></param>
         /// <returns>Updated or not</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateReward(int id, [FromBody] Reward rw)
+        public async Task<IActionResult> UpdateReward(int id, [FromBody] RewardVM rw)
         {
             try
             {
@@ -112,9 +125,10 @@ namespace FlightBookingSystem.Controllers
                     }
                     else
                     {
-                        existRw.Loyalty_Value = rw.Loyalty_Value;
-                        existRw.Discount = rw.Discount;
-                        _rw.UpdateReward(existRw);
+                        /*existRw.Loyalty_Value = rw.Loyalty_Value;
+                        existRw.Discount = rw.Discount;*/
+                        Reward rob = _mapper.Map<RewardVM, Reward>(rw,existRw);
+                        _rw.UpdateReward(rob);
                         return Ok("Reward detail updated");
                     }
                 }

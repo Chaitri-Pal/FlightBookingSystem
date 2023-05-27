@@ -1,9 +1,12 @@
-﻿using FlightBookingSystem.BAL.Contacts;
+﻿using AutoMapper;
+using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
 using FlightBookingSystem.DAL.Model;
+using FlightBookingSystem.DAL.View_Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace FlightBookingSystem.Controllers
 {
@@ -15,9 +18,11 @@ namespace FlightBookingSystem.Controllers
     public class AirportController : ControllerBase
     {
         private readonly IAirportManager _am;
-        public AirportController(IAirportManager am)
+        private readonly IMapper _mapper;
+        public AirportController(IAirportManager am, IMapper mapper)
         {
             _am = am;
+            _mapper = mapper;
         }
 
 
@@ -28,9 +33,26 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <returns>List of all the Airport</returns>
         [HttpGet]
-        public async Task<IEnumerable<Airport>> GetAirports()
+        public async Task<IEnumerable<AirportVM>> GetAirports()
         {
-            return await _am.GetAllAirportsAsync();
+
+            //return await _am.GetAllAirportsAsync();
+            //List<AirportVM> avm = new List<AirportVM>();
+                        
+            IEnumerable<Airport> airp = await _am.GetAllAirportsAsync();
+            var avm = airp.Select(airp=>_mapper.Map<AirportVM>(airp));
+            return avm;
+
+
+            /*foreach (Airport airport in airp)
+            {
+                AirportVM airportVM = new AirportVM();
+                airportVM.A_code = airport.A_code;
+                airportVM.State = airport.State;
+                airportVM.City = airport.City;
+                avm.Add(airportVM);
+            }*/
+
         }
 
 
@@ -42,10 +64,22 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns>The Airport that matches with the id</returns>
-        [HttpGet("{id}")]
-        public async Task<Airport> GetAAirport(int Id)
+        [HttpGet("{Id}")]
+        public async Task<AirportVM> GetAAirport(int Id)
         {
-            return await _am.GetAirportAsync(Id);
+
+            /*Airport ap = await _am.GetAirportAsync(Id);
+            AirportVM avm = new AirportVM();
+            avm.A_code = ap.A_code;
+            avm.State = ap.State;
+            avm.City = ap.City;
+            return avm;*/
+            Airport av = await _am.GetAirportAsync(Id);
+            var airobj = _mapper.Map<AirportVM>(av);
+            return airobj;
+
+
+            //return await _am.GetAirportAsync(Id);
         }
 
 
@@ -59,7 +93,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="ai"></param>
         /// <returns>Output that Airport is added/exists/ or not</returns>
         [HttpPost]
-        public async Task<IActionResult> AddAirport(Airport ai)
+        public async Task<IActionResult> AddAirport(AirportVM ai)
         {
             try
             {
@@ -70,7 +104,8 @@ namespace FlightBookingSystem.Controllers
                 }
                 else
                 {
-                    if (await _am.AddAirport(ai))
+                    Airport air = _mapper.Map<Airport>(ai);
+                    if (await _am.AddAirport(air))
                         return StatusCode(StatusCodes.Status201Created, "New Airport is Created");
                     else
                         return StatusCode(StatusCodes.Status400BadRequest, "Airport already exists");
@@ -94,7 +129,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="ai"></param>
         /// <returns>Updated or not</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAirport(int id, [FromBody] Airport ai)
+        public async Task<IActionResult> UpdateAirport(int id, [FromBody] AirportVM ai)
         {
             try
             {
@@ -112,10 +147,11 @@ namespace FlightBookingSystem.Controllers
                     }
                     else
                     {
-                        existAi.A_code = ai.A_code;
+                        /*existAi.A_code = ai.A_code;
                         existAi.State = ai.State;
-                        existAi.City = ai.City;
-                        _am.UpdateAirport(existAi);
+                        existAi.City = ai.City;*/
+                        Airport airt = _mapper.Map<AirportVM, Airport>(ai, existAi);
+                        _am.UpdateAirport(airt);
                         return Ok("Airport detail updated");
                     }
                 }

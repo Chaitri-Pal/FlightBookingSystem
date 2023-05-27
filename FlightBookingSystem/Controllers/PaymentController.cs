@@ -1,7 +1,9 @@
-﻿using FlightBookingSystem.BAL.Contacts;
+﻿using AutoMapper;
+using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
 using FlightBookingSystem.DAL.Model;
+using FlightBookingSystem.DAL.View_Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,9 +17,11 @@ namespace FlightBookingSystem.Controllers
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentManager _py;
-        public PaymentController(IPaymentManager py)
+        private readonly IMapper _mapper;
+        public PaymentController(IPaymentManager py, IMapper mapper)
         {
             _py = py;
+            _mapper = mapper;
         }
 
 
@@ -28,9 +32,12 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <returns>List of all the Payments</returns>
         [HttpGet]
-        public async Task<IEnumerable<Payment>> GetPayments()
+        public async Task<IEnumerable<PaymentVM>> GetPayments()
         {
-            return await _py.GetAllPaymentsAsync();
+            IEnumerable<Payment> pt = await _py.GetAllPaymentsAsync();
+            var ptob = pt.Select(pt => _mapper.Map<PaymentVM>(pt));
+            return ptob;
+            //return await _py.GetAllPaymentsAsync();
         }
 
 
@@ -42,10 +49,13 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns>The Payment that matches with the id</returns>
-        [HttpGet("{id}")]
-        public async Task<Payment> GetAPayment(int Id)
+        [HttpGet("{Id}")]
+        public async Task<PaymentVM> GetAPayment(int Id)
         {
-            return await _py.GetPaymentAsync(Id);
+            Payment pt = await _py.GetPaymentAsync(Id);
+            var ptob = _mapper.Map<PaymentVM>(pt);
+            return ptob;
+            //return await _py.GetPaymentAsync(Id);
         }
 
 
@@ -59,7 +69,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="py"></param>
         /// <returns>Output that Payment is added/exists/ or not</returns>
         [HttpPost]
-        public async Task<IActionResult> AddPayment(Payment py)
+        public async Task<IActionResult> AddPayment(PaymentVM py)
         {
             try
             {
@@ -70,10 +80,24 @@ namespace FlightBookingSystem.Controllers
                 }
                 else
                 {
-                    if (await _py.AddPayment(py))
-                        return StatusCode(StatusCodes.Status201Created, "New Payment is Created");
-                    else
+                    Payment ptob = _mapper.Map<Payment>(py);
+                    var check = await _py.AddPayment(ptob);
+                    if (check == -1)
+                        return StatusCode(StatusCodes.Status400BadRequest, "The Payment object entered is empty"); 
+                    else if (check == 0)
                         return StatusCode(StatusCodes.Status400BadRequest, "Payment already exists");
+                    else if (check == 1)
+                        return StatusCode(StatusCodes.Status400BadRequest, "Foreign Key values are not correct");
+                    else
+                        return StatusCode(StatusCodes.Status201Created, "New Payment is Created");
+                    /*if (check == 2)
+                        return StatusCode(StatusCodes.Status201Created, "New Payment is Created");
+                    else if(check == 0)
+                        return StatusCode(StatusCodes.Status400BadRequest, "Payment already exists");
+                    else if (check == 1)
+                        return StatusCode(StatusCodes.Status400BadRequest, "Foreign Key values are not correct");
+                    else
+                        return StatusCode(StatusCodes.Status400BadRequest, "The Payment object entered is empty");*/
                 }
 
             }
@@ -94,7 +118,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="py"></param>
         /// <returns>Updated or not</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePayment(int id, [FromBody] Payment py)
+        public async Task<IActionResult> UpdatePayment(int id, [FromBody] PaymentVM py)
         {
             try
             {
@@ -112,14 +136,14 @@ namespace FlightBookingSystem.Controllers
                     }
                     else
                     {
-                        existpy.Booking_Id = py.Booking_Id;
+                        /*existpy.Booking_Id = py.Booking_Id;
                         existpy.P_Type = py.P_Type;
                         existpy.P_Status = py.P_Status;
-
                         existpy.Payment_date = py.Payment_date;
                         existpy.Amount = py.Amount;
-                        //existpy.Customer_Id = py.Customer_Id;
-                        _py.UpdatePayment(existpy);
+                        existpy.Customer_Id = py.Customer_Id;*/
+                        Payment ptob = _mapper.Map<PaymentVM,Payment>(py,existpy);
+                        _py.UpdatePayment(ptob);
                         return Ok("Payment detail updated");
                     }
                 }

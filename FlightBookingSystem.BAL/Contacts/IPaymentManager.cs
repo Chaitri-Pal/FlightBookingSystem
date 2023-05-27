@@ -12,7 +12,7 @@ namespace FlightBookingSystem.BAL.Contacts
     {
         Task<IEnumerable<Payment>> GetAllPaymentsAsync();
         Task<Payment> GetPaymentAsync(int id);
-        Task<bool> AddPayment(Payment py);
+        Task<int> AddPayment(Payment py);
         void UpdatePayment(Payment py);
         void DeletePayment(Payment py);
     }

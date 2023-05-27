@@ -2,12 +2,19 @@
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
 using FlightBookingSystem.DAL.Model;
+using FlightBookingSystem.DAL.View_Model;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+
+
+
 
 namespace FlightBookingSystem.BAL.Services
 {
@@ -18,13 +25,17 @@ namespace FlightBookingSystem.BAL.Services
         {
             _da = da;
         }
+
+
         public async Task<IEnumerable<Airport>> GetAllAirportsAsync()
         {
             return await _da.Airport.GetAllAsync();
+
         }
 
         public async Task<Airport> GetAirportAsync(int id)
         {
+
             return await _da.Airport.GetFirstorDefaultAsync(x => x.Id == id);
         }
 
@@ -34,17 +45,17 @@ namespace FlightBookingSystem.BAL.Services
             if (ai != null)
             {
                 IEnumerable<Airport> air = await _da.Airport.GetAllAsync();
-                if (air.Any(x => x.A_code.Equals(ai.A_code) && x.State.Equals(ai.State)))
+                if (air.Any(x => x.A_code.Equals(ai.A_code) || (x.State.Equals(ai.State)) && x.City.Equals(ai.City))) 
                 {
                     return await Task.FromResult(false);
                 }
                 else
                 {
-                    var obs = new Airport();
+                    /*var obs = new Airport ();
                     obs.A_code = ai.A_code;
                     obs.State = ai.State;
-                    obs.City = ai.City;
-                    _da.Airport.AddAsync(obs);
+                    obs.City = ai.City;*/
+                    _da.Airport.AddAsync(ai);
                     _da.Save();
                     return await Task.FromResult(true);
                 }
@@ -58,6 +69,10 @@ namespace FlightBookingSystem.BAL.Services
 
         public void UpdateAirport(Airport ai)
         {
+
+            //Here we have Update Airport as this because the object copying part is done in the controller so we have kept the input object as Airport and not Airportvm
+            //Airport airport = null;
+
             _da.Airport.UpdateExisting(ai);
             _da.Save();
         }

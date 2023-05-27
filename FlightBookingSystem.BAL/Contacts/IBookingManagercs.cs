@@ -12,7 +12,7 @@ namespace FlightBookingSystem.BAL.Contacts
     {
         Task<IEnumerable<Booking>> GetAllBookingsAsync();
         Task<Booking> GetBookingAsync(int id);
-        Task<bool> AddBooking(Booking bk);
+        Task<int> AddBooking(Booking bk);
         void UpdateBooking(Booking bk);
         void DeleteBooking(Booking bk);
     }

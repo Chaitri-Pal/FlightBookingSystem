@@ -44,7 +44,7 @@ namespace FlightBookingSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Airports");
+                    b.ToTable("Airports", (string)null);
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Booking", b =>
@@ -79,7 +79,7 @@ namespace FlightBookingSystem.Migrations
 
                     b.HasIndex("Schedule_Id");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Customer", b =>
@@ -114,7 +114,7 @@ namespace FlightBookingSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Flight", b =>
@@ -143,7 +143,7 @@ namespace FlightBookingSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Flights");
+                    b.ToTable("Flights", (string)null);
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Payment", b =>
@@ -185,7 +185,7 @@ namespace FlightBookingSystem.Migrations
 
                     b.HasIndex("Reward_Id");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Reward", b =>
@@ -204,7 +204,7 @@ namespace FlightBookingSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rewards");
+                    b.ToTable("Rewards", (string)null);
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Schedule", b =>
@@ -238,7 +238,7 @@ namespace FlightBookingSystem.Migrations
 
                     b.HasIndex("Flight_Id");
 
-                    b.ToTable("Schedules");
+                    b.ToTable("Schedules", (string)null);
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Booking", b =>

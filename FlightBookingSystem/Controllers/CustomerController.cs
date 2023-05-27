@@ -1,9 +1,12 @@
-﻿using FlightBookingSystem.BAL.Contacts;
+﻿using AutoMapper;
+using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
 using FlightBookingSystem.DAL.Model;
+using FlightBookingSystem.DAL.View_Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 
 namespace FlightBookingSystem.Controllers
 {
@@ -15,9 +18,11 @@ namespace FlightBookingSystem.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerManager _cm;
-        public CustomerController(ICustomerManager cm)
+        private readonly IMapper _mapper;
+        public CustomerController(ICustomerManager cm, IMapper mapper)
         {
             _cm = cm;
+            _mapper = mapper;
         }
 
 
@@ -28,9 +33,13 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <returns>List of all the Customers</returns>
         [HttpGet]
-        public async Task<IEnumerable<Customer>> GetCustomers()
+        public async Task<IEnumerable<CustomerVM>> GetCustomers()
         {
-            return await _cm.GetAllCustomersAsync();
+            IEnumerable<Customer> customers = new List<Customer>();
+            customers = await _cm.GetAllCustomersAsync();
+            var cu = customers.Select(customers => _mapper.Map<CustomerVM>(customers));
+            return cu;
+            //return await _cm.GetAllCustomersAsync();
         }
 
 
@@ -42,10 +51,14 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns>The Customer that matches with the id</returns>
-        [HttpGet("{id}")]
-        public async Task<Customer> GetACustomer(int Id)
+        [HttpGet("{Id}")]
+        public async Task<CustomerVM> GetACustomer(int Id)
         {
-            return await _cm.GetCustomerAsync(Id);
+            //return await _cm.GetCustomerAsync(Id);
+            Customer cs = await _cm.GetCustomerAsync(Id);
+            var c = _mapper.Map<CustomerVM>(cs);
+            return c;
+
         }
 
 
@@ -59,7 +72,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="cs"></param>
         /// <returns>Output that customer is added/exists/ or not</returns>
         [HttpPost]
-        public async Task<IActionResult> AddCustomer(Customer cs)
+        public async Task<IActionResult> AddCustomer(CustomerVM cs)
         {
             try
             {
@@ -70,7 +83,9 @@ namespace FlightBookingSystem.Controllers
                 }
                 else
                 {
-                    if(await _cm.AddCustomer(cs))
+                    Customer cus = _mapper.Map<Customer>(cs);
+                    
+                    if(await _cm.AddCustomer(cus))
                         return StatusCode(StatusCodes.Status201Created, "New Customer is Created");
                     else
                         return StatusCode(StatusCodes.Status400BadRequest, "Customer already exists");
@@ -94,7 +109,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="cs"></param>
         /// <returns>Updated or not</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCustomer(int id,[FromBody] Customer cs)
+        public async Task<IActionResult> UpdateCustomer(int id,[FromBody] CustomerVM cs)
         {
             try
             {
@@ -112,14 +127,17 @@ namespace FlightBookingSystem.Controllers
                     }
                     else
                     {
-                        existCs.C_Name = cs.C_Name;
+                        /*existCs.C_Name = cs.C_Name;
                         existCs.Address = cs.Address;
-                        existCs.Phone = cs.Phone;
                         existCs.Email = cs.Email;
+                        existCs.Phone = cs.Phone;
                         existCs.Aadhar = cs.Aadhar;
-                        existCs.DOB = cs.DOB;
-                        _cm.UpdateCustomer(existCs);
-                        return Ok("Customer detail updated");
+                        existCs.DOB = cs.DOB;*/
+                        Customer cust = _mapper.Map<CustomerVM,Customer>(cs, existCs);
+
+                        _cm.UpdateCustomer(cust);
+                       
+                        return Ok("Customer detail updated ");
                     }
                 }
             }

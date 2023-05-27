@@ -1,13 +1,7 @@
 ﻿using FlightBookingSystem.BAL.Contacts;
-using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
 using FlightBookingSystem.DAL.Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 
 namespace FlightBookingSystem.BAL.Services
 {
@@ -28,34 +22,46 @@ namespace FlightBookingSystem.BAL.Services
             return await _da.Schedule.GetFirstorDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<bool> AddSchedule(Schedule sh)
+        public async Task<int> AddSchedule(Schedule sh)
         {
+            IEnumerable<Airport> ai = await _da.Airport.GetAllAsync();
+            IEnumerable<Flight> fl = await _da.Flight.GetAllAsync();
+            
             //if input is not null then the value is checked if it already exists or not if it does hen return already exists else add it
             if (sh != null)
             {
                 IEnumerable<Schedule> sch = await _da.Schedule.GetAllAsync();
                 //&& x.Flight_Id.Equals(sh.Flight_Id)
-                if (sch.Any(x => x.Dep_Time.Equals(sh.Dep_Time) && x.Arr_Time.Equals(sh.Arr_Time)))
+                if (sch.Any(x => x.Dep_Time.Equals(sh.Dep_Time) && x.Arr_Time.Equals(sh.Arr_Time) && x.Arr_id.Equals(sh.Arr_id) && x.Dep_id.Equals(sh.Dep_id)))
                 {
-                    return await Task.FromResult(false);
+                    return await Task.FromResult(0);
+                }
+
+                else if (!(ai.Any(x => x.Id.Equals(sh.Dep_id))) || !(ai.Any(x=> x.Id.Equals(sh.Arr_id))) || !(fl.Any(x => x.Id.Equals(sh.Flight_Id))))
+                {
+                    return await Task.FromResult(1);
                 }
                 else
                 {
-                    var scd = new Schedule();
+                    if(!(sh.Arr_id.Equals(sh.Dep_id)))
+                    {
+                        _da.Schedule.AddAsync(sh);
+                        _da.Save();
+                        return await Task.FromResult(2);
+                    }
+                    /*var scd = new Schedule();
                     scd.Dep_Time = sh.Dep_Time;
                     scd.Arr_Time = sh.Arr_Time;
                     scd.Dep_id = sh.Dep_id;
                     scd.Arr_id = scd.Arr_id;
-                    //scd.Flight_ID = sh.Flight_ID;
-                    _da.Schedule.AddAsync(scd);
-                    _da.Save();
-                    return await Task.FromResult(true);
+                    scd.Flight_Id = sh.Flight_Id;*/
+                    return -2;
                 }
 
             }
             else
             {
-                return false;
+                return -1;
             }
         }
 

@@ -12,7 +12,7 @@ namespace FlightBookingSystem.BAL.Contacts
     {
         Task<IEnumerable<Schedule>> GetAllSchedulesAsync();
         Task<Schedule> GetScheduleAsync(int id);
-        Task<bool> AddSchedule(Schedule sh);
+        Task<int> AddSchedule(Schedule sh);
         void UpdateSchedule(Schedule sh);
         void DeleteSchedule(Schedule sh);
     }
