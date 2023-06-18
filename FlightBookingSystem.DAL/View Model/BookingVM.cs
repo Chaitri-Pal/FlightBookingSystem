@@ -18,7 +18,7 @@ namespace FlightBookingSystem.DAL.View_Model
 
         //Foreign keys
         public int Schedule_Id { get; set; }
-        public int Customer_Id { get; set; }
+        public int User_Id { get; set; }
         public int Reward_Id { get; set; }
     }
 }

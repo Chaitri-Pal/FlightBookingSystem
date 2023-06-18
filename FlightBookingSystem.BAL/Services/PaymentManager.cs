@@ -31,20 +31,20 @@ namespace FlightBookingSystem.BAL.Services
 
         public async Task<int> AddPayment(Payment py)
         {
-            IEnumerable<Customer> cs = await _da.Customer.GetAllAsync();
+            IEnumerable<User> cs = await _da.User.GetAllAsync();
             IEnumerable<Booking> bk = await _da.Booking.GetAllAsync();
             IEnumerable<Reward> re = await _da.Reward.GetAllAsync();
             //if input is not null then the value is checked if it already exists or not if it does hen return already exists else add it
             if (py != null)
             {
                 IEnumerable<Payment> ptm = await _da.Payment.GetAllAsync();
-                if (ptm.Any(x => x.Booking_Id.Equals(py.Booking_Id) && x.Customer_Id.Equals(py.Customer_Id) && x.P_Status.Equals("Yes")))
+                if (ptm.Any(x => x.Booking_Id.Equals(py.Booking_Id) && x.User_Id.Equals(py.User_Id) && x.P_Status.Equals("Yes")))
                 {
                     //&& x.Customer_Id.Equals(py.Customer_Id)
                     return await Task.FromResult(0);
                 }
                 //check if the foreign key items exist in the primary key table
-                else if (!(cs.Any(x => x.Id.Equals(py.Customer_Id))) || !(bk.Any(x => x.Id.Equals(py.Booking_Id))) || !(re.Any(x => x.Id.Equals(py.Reward_Id))))
+                else if (!(cs.Any(x => x.Id.Equals(py.User_Id))) || !(bk.Any(x => x.Id.Equals(py.Booking_Id))) || !(re.Any(x => x.Id.Equals(py.Reward_Id))))
                 {
                     return await Task.FromResult(1);
                 }

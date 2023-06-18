@@ -10,9 +10,13 @@ namespace FlightBookingSystem.DAL.Data
 {
     public class ApplicationDBContext : DbContext
     {
+        public ApplicationDBContext()
+        {
+        }
+
         public ApplicationDBContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<Customer> Customers { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Flight> Flights { get; set; }
         public DbSet<Airport> Airports { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
@@ -49,9 +53,9 @@ namespace FlightBookingSystem.DAL.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Booking>()
-                .HasOne(c => c.customers)
+                .HasOne(c => c.users)
                 .WithMany(b => b.bookings)
-                .HasForeignKey(c => c.Customer_Id)
+                .HasForeignKey(c => c.User_Id)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Booking>()
@@ -67,9 +71,9 @@ namespace FlightBookingSystem.DAL.Data
                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Payment>()
-               .HasOne(c => c.customers)
+               .HasOne(c => c.users)
                .WithMany(p => p.payments)
-               .HasForeignKey(c => c.Customer_Id)
+               .HasForeignKey(c => c.User_Id)
                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Payment>()

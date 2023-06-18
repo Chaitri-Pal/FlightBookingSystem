@@ -15,11 +15,11 @@ namespace FlightBookingSystem.Controllers
 
     //Controller should call BAL layer and BAL layer should call DAta Access Layer
     //Similar to DAL we'll write another repository for BAL and inject the both in controllers
-    public class CustomerController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly ICustomerManager _cm;
+        private readonly IUserManager _cm;
         private readonly IMapper _mapper;
-        public CustomerController(ICustomerManager cm, IMapper mapper)
+        public UserController(IUserManager cm, IMapper mapper)
         {
             _cm = cm;
             _mapper = mapper;
@@ -33,11 +33,11 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <returns>List of all the Customers</returns>
         [HttpGet]
-        public async Task<IEnumerable<CustomerVM>> GetCustomers()
+        public async Task<IEnumerable<UserVM>> GetCustomers()
         {
-            IEnumerable<Customer> customers = new List<Customer>();
-            customers = await _cm.GetAllCustomersAsync();
-            var cu = customers.Select(customers => _mapper.Map<CustomerVM>(customers));
+            IEnumerable<User> customers = new List<User>();
+            customers = await _cm.GetAllUsersAsync();
+            var cu = customers.Select(customers => _mapper.Map<UserVM>(customers));
             return cu;
             //return await _cm.GetAllCustomersAsync();
         }
@@ -52,11 +52,11 @@ namespace FlightBookingSystem.Controllers
         /// <param name="Id"></param>
         /// <returns>The Customer that matches with the id</returns>
         [HttpGet("{Id}")]
-        public async Task<CustomerVM> GetACustomer(int Id)
+        public async Task<UserVM> GetAUser(int Id)
         {
             //return await _cm.GetCustomerAsync(Id);
-            Customer cs = await _cm.GetCustomerAsync(Id);
-            var c = _mapper.Map<CustomerVM>(cs);
+            User cs = await _cm.GetUserAsync(Id);
+            var c = _mapper.Map<UserVM>(cs);
             return c;
 
         }
@@ -72,7 +72,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="cs"></param>
         /// <returns>Output that customer is added/exists/ or not</returns>
         [HttpPost]
-        public async Task<IActionResult> AddCustomer(CustomerVM cs)
+        public async Task<IActionResult> AddUser(UserVM cs)
         {
             try
             {
@@ -83,18 +83,18 @@ namespace FlightBookingSystem.Controllers
                 }
                 else
                 {
-                    Customer cus = _mapper.Map<Customer>(cs);
+                    User cus = _mapper.Map<User>(cs);
                     
-                    if(await _cm.AddCustomer(cus))
-                        return StatusCode(StatusCodes.Status201Created, "New Customer is Created");
+                    if(await _cm.AddUser(cus))
+                        return StatusCode(StatusCodes.Status201Created, "New User is Created");
                     else
-                        return StatusCode(StatusCodes.Status400BadRequest, "Customer already exists");
+                        return StatusCode(StatusCodes.Status400BadRequest, "User already exists");
                 }
 
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error while Adding new Customer");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error while Adding new User");
             }
         }
 
@@ -109,7 +109,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="cs"></param>
         /// <returns>Updated or not</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCustomer(int id,[FromBody] CustomerVM cs)
+        public async Task<IActionResult> UpdateUser(int id,[FromBody] UserVM cs)
         {
             try
             {
@@ -120,7 +120,7 @@ namespace FlightBookingSystem.Controllers
                 }
                 else
                 {
-                    Customer existCs = await _cm.GetCustomerAsync(id);
+                    User existCs = await _cm.GetUserAsync(id);
                     if (existCs == null)
                     {
                         return NotFound("Id does not exist");
@@ -133,17 +133,17 @@ namespace FlightBookingSystem.Controllers
                         existCs.Phone = cs.Phone;
                         existCs.Aadhar = cs.Aadhar;
                         existCs.DOB = cs.DOB;*/
-                        Customer cust = _mapper.Map<CustomerVM,Customer>(cs, existCs);
+                        User cust = _mapper.Map<UserVM,User>(cs, existCs);
 
-                        _cm.UpdateCustomer(cust);
+                        _cm.UpdateUser(cust);
                        
-                        return Ok("Customer detail updated ");
+                        return Ok("User detail updated ");
                     }
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error while Updating Customer Details");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error while Updating User Details");
             }
         }
 
@@ -156,7 +156,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="id"></param>
         /// <returns>deleted or not</returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
             try
             {
@@ -167,16 +167,16 @@ namespace FlightBookingSystem.Controllers
                 }
                 else
                 {
-                    Customer delCs = await _cm.GetCustomerAsync(id);
+                    User delCs = await _cm.GetUserAsync(id);
                     if (delCs == null)
                     { return NotFound("ID does not exist"); }
-                    _cm.DeleteCustomer(delCs);
-                    return Ok("Customer Deleted");
+                    _cm.DeleteUser(delCs);
+                    return Ok("User Deleted");
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error while Removing Customer Details");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error while Removing User Details");
             }
 
         }

@@ -18,8 +18,11 @@ namespace FlightBookingSystem.DAL.Model
 
 
         //Foreign Keys
+        [Required]
         public int Dep_id { get; set; }
+        [Required]
         public int Arr_id { get; set; }
+        [Required]
         public int Flight_Id { get; set; }
 
 

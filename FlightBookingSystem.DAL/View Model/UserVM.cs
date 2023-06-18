@@ -5,14 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlightBookingSystem.DAL.Model
+namespace FlightBookingSystem.DAL.View_Model
 {
-    public class Customer
+    public class UserVM
     {
-        [Key]
+        [Required]
         public int Id { get; set; }
         [Required]
-        public string C_Name { get; set;}
+        public string RoleType { get; set; }
+        [Required] 
+        public string Name { get; set; }
         [Required]
         public string Address { get; set; }
         [Required]
@@ -23,12 +25,7 @@ namespace FlightBookingSystem.DAL.Model
         public string Aadhar { get; set; }
         [Required]
         public DateTime DOB { get; set; }
-
-
-        //Navigation properties of child tables
-        public virtual ICollection<Booking> bookings { get; set; }
-        public virtual ICollection<Payment> payments { get; set; }
-
-
+        [Required]
+        public string Password { get; set; }
     }
 }

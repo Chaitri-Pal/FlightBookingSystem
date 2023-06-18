@@ -8,8 +8,8 @@ namespace FlightBookingSystem
     {
         public AutoMapperProfile() 
         {
-            CreateMap<Customer, CustomerVM>();
-            CreateMap<CustomerVM, Customer>();
+            CreateMap<User, UserVM>();
+            CreateMap<UserVM, User>();
 
             CreateMap<AirportVM, Airport>();
             CreateMap<Airport, AirportVM>();

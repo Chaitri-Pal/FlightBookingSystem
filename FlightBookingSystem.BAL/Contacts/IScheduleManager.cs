@@ -11,6 +11,7 @@ namespace FlightBookingSystem.BAL.Contacts
     public interface IScheduleManager
     {
         Task<IEnumerable<Schedule>> GetAllSchedulesAsync();
+        Task<IEnumerable<Schedule>> GetRequiredSchedulesAsync(int src, int dest, DateTime date);
         Task<Schedule> GetScheduleAsync(int id);
         Task<int> AddSchedule(Schedule sh);
         void UpdateSchedule(Schedule sh);

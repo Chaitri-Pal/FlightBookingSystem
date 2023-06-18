@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightBookingSystem", "FlightBookingSystem\FlightBookingSystem.csproj", "{405EF575-8D19-4C16-A713-54064F8FD7FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightBookingSystem", "FlightBookingSystem\FlightBookingSystem.csproj", "{405EF575-8D19-4C16-A713-54064F8FD7FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightBookingSystem.BAL", "FlightBookingSystem.BAL\FlightBookingSystem.BAL.csproj", "{475819AC-4DEC-423A-9D24-B6D461F6D38C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightBookingSystem.BAL", "FlightBookingSystem.BAL\FlightBookingSystem.BAL.csproj", "{475819AC-4DEC-423A-9D24-B6D461F6D38C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightBookingSystem.DAL", "FlightBookingSystem.DAL\FlightBookingSystem.DAL.csproj", "{43F3DAF6-09E0-419B-8B54-C918D4AC6026}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightBookingSystem.DAL", "FlightBookingSystem.DAL\FlightBookingSystem.DAL.csproj", "{43F3DAF6-09E0-419B-8B54-C918D4AC6026}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

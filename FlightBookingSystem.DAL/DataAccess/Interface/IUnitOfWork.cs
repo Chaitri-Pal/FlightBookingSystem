@@ -11,7 +11,7 @@ namespace FlightBookingSystem.DAL.DataAccess.Interface
     public interface IUnitOfWork
     {
         //interface cannot set
-        ICustomerRepo Customer { get; }
+        IUserRepo User { get; }
         IAirportRepo Airport { get; }
         IBookingRepo Booking { get; }
         IFlightRepo Flight { get; }
@@ -20,11 +20,8 @@ namespace FlightBookingSystem.DAL.DataAccess.Interface
         IScheduleRepo Schedule { get; }
         void Save();
     }
-    public interface ICustomerRepo : IRepo<Customer> { }
+    public interface IUserRepo : IRepo<User> { }
     public interface IAirportRepo : IRepo<Airport> { }
-
-    
-
     public interface IBookingRepo : IRepo<Booking> { }
     public interface IFlightRepo : IRepo<Flight> { }
     public interface IPaymentRepo : IRepo<Payment> { }

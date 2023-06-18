@@ -22,14 +22,17 @@ namespace FlightBookingSystem.DAL.Model
 
 
         //Foreign Keys
-        public int Customer_Id { get; set; }
+        [Required]
+        public int User_Id { get; set; }
+        [Required]
         public int Booking_Id { get; set; }
+        [Required]
         public int Reward_Id { get; set; }
 
 
 
         //Navigation properties of child/parent  tables
-        public virtual Customer customers { get; set; }
+        public virtual User users { get; set; }
         public virtual Booking bookings { get; set; }
         public virtual Reward rewards { get; set; }
         

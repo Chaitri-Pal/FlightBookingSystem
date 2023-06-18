@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using FlightBookingSystem.BAL.Contacts;
-using FlightBookingSystem.DAL.Data;
-using FlightBookingSystem.DAL.DataAccess.Interface;
 using FlightBookingSystem.DAL.Model;
 using FlightBookingSystem.DAL.View_Model;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace FlightBookingSystem.Controllers
@@ -34,10 +31,11 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <returns>List of all the Bookings</returns>
         [HttpGet]
+       // [Authorize]
         public async Task<IEnumerable<BookingVM>> GetBookings()
         {
             IEnumerable<Booking> book = await _bk.GetAllBookingsAsync();
-            var bobj = book.Select(book=>_mapper.Map<BookingVM>(book));
+            var bobj = book.Select(book => _mapper.Map<BookingVM>(book));
             return bobj;
 
             /*List<BookingVM> bkv = new List<BookingVM>();
@@ -53,10 +51,25 @@ namespace FlightBookingSystem.Controllers
                 bkv.Add(b);
             }
             return bkv;*/
-        
-        //return await _bk.GetAllBookingsAsync();
-    }
 
+            //return await _bk.GetAllBookingsAsync();
+        }
+
+
+        /// <summary>
+        /// This method returns the list of bookings based on user id.
+        /// </summary>
+        /// <param name="Uid"></param>
+        /// <returns></returns>
+        [HttpGet("user/{Uid}")]
+        //[Authorize]
+        public async Task<IEnumerable<BookingVM>> GetBookingsByUserId(int Uid)
+        {
+            IEnumerable<Booking> book = await _bk.GetByUserId(Uid);
+            var bobj = book.Select(book => _mapper.Map<BookingVM>(book));
+            return bobj;
+
+        }
 
 
 
@@ -67,6 +80,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="Id"></param>
         /// <returns>The Booking that matches with the id</returns>
         [HttpGet("{Id}")]
+        //[Authorize]
         public async Task<BookingVM> GetABooking(int Id)
         {
             Booking bkv = await _bk.GetBookingAsync(Id);
@@ -87,6 +101,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="bk"></param>
         /// <returns>Output that Booking is added/exists/ or not</returns>
         [HttpPost]
+        //[Authorize]
         public async Task<IActionResult> AddBooking(BookingVM bk)
         {
             try
@@ -105,9 +120,9 @@ namespace FlightBookingSystem.Controllers
                     else if (check == 1)
                         return StatusCode(StatusCodes.Status400BadRequest, "Foreign key values are not correct");
 
-                    else if(check == -1)
+                    else if (check == -1)
                         return StatusCode(StatusCodes.Status400BadRequest, "The Booking object entered is empty");
-                    else 
+                    else
                         return StatusCode(StatusCodes.Status201Created, "New Booking created");
 
                 }
@@ -115,7 +130,7 @@ namespace FlightBookingSystem.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,"Error while Adding new Booking");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error while Adding new Booking");
             }
         }
 
@@ -130,6 +145,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="bk"></param>
         /// <returns>Updated or not</returns>
         [HttpPut("{id}")]
+        //[Authorize]
         public async Task<IActionResult> UpdateBooking(int id, [FromBody] BookingVM bk)
         {
             try
@@ -148,7 +164,7 @@ namespace FlightBookingSystem.Controllers
                     }
                     else
                     {
-                        var bookobj = _mapper.Map<BookingVM, Booking>(bk,existBk);
+                        var bookobj = _mapper.Map<BookingVM, Booking>(bk, existBk);
                         /*existBk.Schedule_Id = bk.Schedule_Id;
                         existBk.Customer_Id = bk.Customer_Id;
                         existBk.Booking_date = bk.Booking_date;                
@@ -174,6 +190,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="id"></param>
         /// <returns>deleted or not</returns>
         [HttpDelete("{id}")]
+        //[Authorize]
         public async Task<IActionResult> DeleteBooking(int id)
         {
             try

@@ -11,43 +11,43 @@ using System.Threading.Tasks;
 
 namespace FlightBookingSystem.BAL.Services
 {
-    public class CustomerManager : ICustomerManager
+    public class UserManager : IUserManager
     {
         private readonly IUnitOfWork _da;
-        public CustomerManager(IUnitOfWork da) 
+        public UserManager(IUnitOfWork da) 
         {
             _da = da;
         }
-        public async Task<IEnumerable<Customer>> GetAllCustomersAsync()
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            return await _da.Customer.GetAllAsync();
+            return await _da.User.GetAllAsync();
         }
 
-        public async Task<Customer> GetCustomerAsync(int id)
+        public async Task<User> GetUserAsync(int id)
         {
-            return await _da.Customer.GetFirstorDefaultAsync(x=>x.Id==id);
+            return await _da.User.GetFirstorDefaultAsync(x=>x.Id==id);
         }
 
-        public async Task<bool> AddCustomer(Customer cs)
+        public async Task<bool> AddUser(User cs)
         {
             //if input is not null then the value is checked if it already exists or not if it does hen return already exists else add it
            if(cs != null)
             {
-                IEnumerable<Customer> cust = await _da.Customer.GetAllAsync();
-                if(cust.Any(x => x.C_Name.Equals(cs.C_Name) && x.Aadhar.Equals(cs.Aadhar) && x.Email.Equals(cs.Email)))
+                IEnumerable<User> cust = await _da.User.GetAllAsync();
+                if(cust.Any(x => x.Name.Equals(cs.Name) && x.Aadhar.Equals(cs.Aadhar) && x.Email.Equals(cs.Email)))
                 {
                     return await Task.FromResult(false);
                 }
                 else
                 {
-                    var cus = new Customer();
+                    var cus = new User();
                     /*cus.C_Name = cs.C_Name;
                     cus.Address = cs.Address;
                     cus.Phone = cs.Phone;
                     cus.Email = cs.Email;
                     cus.Aadhar = cs.Aadhar;
                     cus.DOB = cs.DOB;*/
-                    _da.Customer.AddAsync(cs);
+                    _da.User.AddAsync(cs);
                     _da.Save();
                     return await Task.FromResult(true);
                 }
@@ -59,16 +59,16 @@ namespace FlightBookingSystem.BAL.Services
             }
         }
 
-        public void UpdateCustomer(Customer cs)
+        public void UpdateUser(User cs)
         {
-            _da.Customer.UpdateExisting(cs);
+            _da.User.UpdateExisting(cs);
             
             _da.Save();
         }
 
-        public void DeleteCustomer(Customer cs)
+        public void DeleteUser(User cs)
         {
-            _da.Customer.Remove(cs);
+            _da.User.Remove(cs);
             _da.Save();
         }
     }

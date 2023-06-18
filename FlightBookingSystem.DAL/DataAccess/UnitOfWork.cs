@@ -19,7 +19,7 @@ namespace FlightBookingSystem.DAL.DataAccess
         public UnitOfWork(ApplicationDBContext db) 
         {
             _db = db;
-            Customer = new CustomerRepo(_db);
+            User = new UserRepo(_db);
             Airport = new AirportRepo(_db);
             Booking = new BookingRepo(_db);
             Flight = new FlightRepo(_db);
@@ -28,7 +28,7 @@ namespace FlightBookingSystem.DAL.DataAccess
             Schedule = new ScheduleRepo(_db);
 
         }
-        public ICustomerRepo Customer { get; private set; }
+        public IUserRepo User { get; private set; }
         public IAirportRepo Airport { get; private set; }
         public IBookingRepo Booking { get; private set; }
         public IFlightRepo Flight { get; private set; }
@@ -43,10 +43,10 @@ namespace FlightBookingSystem.DAL.DataAccess
     }
 
     //ICustomer interface given because in future if we need any class specific functions we can implement it
-    public class CustomerRepo : Repo<Customer>, ICustomerRepo
+    public class UserRepo : Repo<User>, IUserRepo
     {
         private readonly ApplicationDBContext _db;
-        public CustomerRepo(ApplicationDBContext db) :base(db) 
+        public UserRepo(ApplicationDBContext db) :base(db) 
         {
             _db = db;
         }
@@ -74,6 +74,7 @@ namespace FlightBookingSystem.DAL.DataAccess
         {
             _db = db;
         }
+        
     }
     public class PaymentRepo : Repo<Payment>, IPaymentRepo
     {

@@ -6,6 +6,7 @@ using FlightBookingSystem.DAL.Model;
 using FlightBookingSystem.DAL.View_Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.Language;
 
 namespace FlightBookingSystem.Controllers
 {
@@ -40,6 +41,21 @@ namespace FlightBookingSystem.Controllers
             //return await _sh.GetAllSchedulesAsync();
         }
 
+
+
+        //Get:api/Schedule
+        /// <summary>
+        /// This method returns all the Schedules based on location and date
+        /// </summary>
+        /// <returns>List of all the Schedules</returns>
+        [HttpGet("{sourceLocation}/{destinationLocation}/{date}")]
+        public async Task<IEnumerable<ScheduleVM>> GetScheduleByRequirement(int sourceLocation, int destinationLocation, DateTime date)
+        {
+            IEnumerable<Schedule> shd = await _sh.GetRequiredSchedulesAsync(sourceLocation, destinationLocation, date);
+            var shob = shd.Select(shd => _mapper.Map<ScheduleVM>(shd));
+            return shob;
+            //return await _sh.GetAllSchedulesAsync();
+        }
 
 
 

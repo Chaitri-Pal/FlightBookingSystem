@@ -4,6 +4,7 @@ using FlightBookingSystem.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlightBookingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230618075950_Userupdate")]
+    partial class Userupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,13 +243,9 @@ namespace FlightBookingSystem.Migrations
                     b.Property<long>("Phone")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("RoleType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Booking", b =>
@@ -263,17 +262,17 @@ namespace FlightBookingSystem.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("FlightBookingSystem.DAL.Model.User", "users")
+                    b.HasOne("FlightBookingSystem.DAL.Model.User", "customers")
                         .WithMany("bookings")
                         .HasForeignKey("User_Id")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.Navigation("customers");
+
                     b.Navigation("rewards");
 
                     b.Navigation("schedules");
-
-                    b.Navigation("users");
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Payment", b =>
@@ -290,7 +289,7 @@ namespace FlightBookingSystem.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("FlightBookingSystem.DAL.Model.User", "users")
+                    b.HasOne("FlightBookingSystem.DAL.Model.User", "customers")
                         .WithMany("payments")
                         .HasForeignKey("User_Id")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -298,9 +297,9 @@ namespace FlightBookingSystem.Migrations
 
                     b.Navigation("bookings");
 
-                    b.Navigation("rewards");
+                    b.Navigation("customers");
 
-                    b.Navigation("users");
+                    b.Navigation("rewards");
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Schedule", b =>

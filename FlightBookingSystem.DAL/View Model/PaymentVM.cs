@@ -22,7 +22,7 @@ namespace FlightBookingSystem.DAL.View_Model
 
 
         //Foreign Keys
-        public int Customer_Id { get; set; }
+        public int User_Id { get; set; }
         public int Booking_Id { get; set; }
         public int Reward_Id { get; set; }
     }

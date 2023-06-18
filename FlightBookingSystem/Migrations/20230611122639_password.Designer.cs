@@ -4,6 +4,7 @@ using FlightBookingSystem.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlightBookingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230611122639_password")]
+    partial class password
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,24 +65,63 @@ namespace FlightBookingSystem.Migrations
                     b.Property<DateTime>("Booking_date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Customer_Id")
+                        .HasColumnType("int");
+
                     b.Property<int>("Reward_Id")
                         .HasColumnType("int");
 
                     b.Property<int>("Schedule_Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("User_Id")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("Customer_Id");
 
                     b.HasIndex("Reward_Id");
 
                     b.HasIndex("Schedule_Id");
 
-                    b.HasIndex("User_Id");
-
                     b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("FlightBookingSystem.DAL.Model.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Aadhar")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C_Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DOB")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Phone")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Flight", b =>
@@ -125,6 +167,9 @@ namespace FlightBookingSystem.Migrations
                     b.Property<int>("Booking_Id")
                         .HasColumnType("int");
 
+                    b.Property<int>("Customer_Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("P_Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -139,16 +184,13 @@ namespace FlightBookingSystem.Migrations
                     b.Property<int>("Reward_Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("User_Id")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Booking_Id");
 
-                    b.HasIndex("Reward_Id");
+                    b.HasIndex("Customer_Id");
 
-                    b.HasIndex("User_Id");
+                    b.HasIndex("Reward_Id");
 
                     b.ToTable("Payments");
                 });
@@ -206,51 +248,14 @@ namespace FlightBookingSystem.Migrations
                     b.ToTable("Schedules");
                 });
 
-            modelBuilder.Entity("FlightBookingSystem.DAL.Model.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Aadhar")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DOB")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("Phone")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("RoleType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Booking", b =>
                 {
+                    b.HasOne("FlightBookingSystem.DAL.Model.Customer", "customers")
+                        .WithMany("bookings")
+                        .HasForeignKey("Customer_Id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("FlightBookingSystem.DAL.Model.Reward", "rewards")
                         .WithMany("bookings")
                         .HasForeignKey("Reward_Id")
@@ -263,17 +268,11 @@ namespace FlightBookingSystem.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("FlightBookingSystem.DAL.Model.User", "users")
-                        .WithMany("bookings")
-                        .HasForeignKey("User_Id")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                    b.Navigation("customers");
 
                     b.Navigation("rewards");
 
                     b.Navigation("schedules");
-
-                    b.Navigation("users");
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Payment", b =>
@@ -284,23 +283,23 @@ namespace FlightBookingSystem.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("FlightBookingSystem.DAL.Model.Customer", "customers")
+                        .WithMany("payments")
+                        .HasForeignKey("Customer_Id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("FlightBookingSystem.DAL.Model.Reward", "rewards")
                         .WithMany("payments")
                         .HasForeignKey("Reward_Id")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("FlightBookingSystem.DAL.Model.User", "users")
-                        .WithMany("payments")
-                        .HasForeignKey("User_Id")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("bookings");
 
-                    b.Navigation("rewards");
+                    b.Navigation("customers");
 
-                    b.Navigation("users");
+                    b.Navigation("rewards");
                 });
 
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Schedule", b =>
@@ -342,6 +341,13 @@ namespace FlightBookingSystem.Migrations
                     b.Navigation("payments");
                 });
 
+            modelBuilder.Entity("FlightBookingSystem.DAL.Model.Customer", b =>
+                {
+                    b.Navigation("bookings");
+
+                    b.Navigation("payments");
+                });
+
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Flight", b =>
                 {
                     b.Navigation("schedules");
@@ -357,13 +363,6 @@ namespace FlightBookingSystem.Migrations
             modelBuilder.Entity("FlightBookingSystem.DAL.Model.Schedule", b =>
                 {
                     b.Navigation("bookings");
-                });
-
-            modelBuilder.Entity("FlightBookingSystem.DAL.Model.User", b =>
-                {
-                    b.Navigation("bookings");
-
-                    b.Navigation("payments");
                 });
 #pragma warning restore 612, 618
         }

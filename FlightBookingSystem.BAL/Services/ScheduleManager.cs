@@ -1,7 +1,6 @@
 ﻿using FlightBookingSystem.BAL.Contacts;
 using FlightBookingSystem.DAL.DataAccess.Interface;
 using FlightBookingSystem.DAL.Model;
-using System.Security.Cryptography.X509Certificates;
 
 namespace FlightBookingSystem.BAL.Services
 {
@@ -75,6 +74,11 @@ namespace FlightBookingSystem.BAL.Services
         {
             _da.Schedule.Remove(sh);
             _da.Save();
+        }
+
+        public async Task<IEnumerable<Schedule>> GetRequiredSchedulesAsync(int src, int dest, DateTime date)
+        {
+            return await _da.Schedule.GetAllListAsync(x => x.Arr_id == src && x.Dep_id == dest && (x.Arr_Time.Date).Equals(date) && (x.Dep_Time.Date).Equals(date));
         }
     }
 }

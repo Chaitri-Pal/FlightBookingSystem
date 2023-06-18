@@ -4,6 +4,7 @@ using FlightBookingSystem.DAL.Data;
 using FlightBookingSystem.DAL.DataAccess.Interface;
 using FlightBookingSystem.DAL.Model;
 using FlightBookingSystem.DAL.View_Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,6 +33,7 @@ namespace FlightBookingSystem.Controllers
         /// </summary>
         /// <returns>List of all the Payments</returns>
         [HttpGet]
+        //[Authorize]
         public async Task<IEnumerable<PaymentVM>> GetPayments()
         {
             IEnumerable<Payment> pt = await _py.GetAllPaymentsAsync();
@@ -50,6 +52,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="Id"></param>
         /// <returns>The Payment that matches with the id</returns>
         [HttpGet("{Id}")]
+        //[Authorize]
         public async Task<PaymentVM> GetAPayment(int Id)
         {
             Payment pt = await _py.GetPaymentAsync(Id);
@@ -69,6 +72,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="py"></param>
         /// <returns>Output that Payment is added/exists/ or not</returns>
         [HttpPost]
+        //[Authorize]
         public async Task<IActionResult> AddPayment(PaymentVM py)
         {
             try
@@ -118,6 +122,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="py"></param>
         /// <returns>Updated or not</returns>
         [HttpPut("{id}")]
+        //[Authorize]
         public async Task<IActionResult> UpdatePayment(int id, [FromBody] PaymentVM py)
         {
             try
@@ -163,6 +168,7 @@ namespace FlightBookingSystem.Controllers
         /// <param name="id"></param>
         /// <returns>deleted or not</returns>
         [HttpDelete("{id}")]
+        //[Authorize]
         public async Task<IActionResult> DeletePayment(int id)
         {
             try
